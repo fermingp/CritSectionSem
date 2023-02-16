@@ -1,13 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Feb  9 10:01:05 2023
-
-@author: carlosdm
-"""
 from multiprocessing import Process
 from multiprocessing import BoundedSemaphore
 from multiprocessing import Value
+import time
+import random
 N= 8
 
 
@@ -15,16 +10,18 @@ semaphore = BoundedSemaphore(1)
 
 def task(common, tid, semaphore): 
     for i in range(10):
-        print(f'{tid}−{i}: Non−critical Section')
-        print(f'{tid}−{i}: End of non−critical Section') 
+        print(f'{tid}−{i}: Non−critical Section', flush = True)
+        time.sleep(random.random())
+        print(f'{tid}−{i}: End of non−critical Section', flush = True) 
         semaphore.acquire()
-        print(f'{tid}−{i}: Giving up') 
-        print(f'{tid}−{i}: Critical section')
+        print(f'{tid}−{i}: Critical section', flush = True)
         v = common.value + 1 
-        print(f'{tid}−{i}: Inside critical section') 
+        print(f'{tid}−{i}: Inside critical section', flush = True) 
+        time.sleep(random.random())
         common.value = v
-        print(f'{tid}−{i}: End of critical section') 
+        print(f'{tid}−{i}: End of critical section', flush = True) 
         semaphore.release()
+        
 def main(): 
     lp = []
     common = Value('i', 0) 
